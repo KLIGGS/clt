@@ -76,4 +76,3 @@ UPDATE sales_channel_domain SET url='https://foo.com.local' WHERE url='https://f
 cd $DIR_ROOT
 bin/console cache:clear
 
-
