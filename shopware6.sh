@@ -1,10 +1,12 @@
 #!/bin/bash
 
 # Clone Shopware local to live
-# description   		Shopware 6 sync from MacOS local to live Linux server env
+# description Shopware 6 sync from MacOS local to live Linux server env
 
-## Clone Shopware #####################
-# Define your directories
+## Clone Shopware ####################################################################################
+
+# Define your local and remote directories
+
 SRC='/Users/mac/Sites/foo.com/'
 DST='user@foo.com:/home/www/shopware6/'
 
@@ -22,7 +24,7 @@ rsync -azh -r --delete \
 	   --exclude *.DS_Store \
 	 $SRC $DST
    
-## Dump local MySQL #####################
+## Dump local MySQL ##################################################################################
 
 # Important
 # Check .sql dump for DEFINER=`user`@`localhost`. It MUST be eligable user at your target platfrom.
@@ -38,33 +40,40 @@ mysqldump -h $DB_HOST -u$DB_USER -p$DB_PASSWORD --no-tablespaces shopware6| gzip
 # Some MacOS local enviroments may require full path. Example
 /Applications/MAMP/Library/bin/mysqldump --user=$DB_USER --password=$DB_PASSWORD shopware6 | gzip > /Users/mac/Sites/shopware6.sql.gz
 
-## Import local MySQL to Server  #####################
+## Import local MySQL to Server  ######################################################################
+
 # replace db_shopware6 with your target db on live enviroment
 
 # sql with gzip compression
 gunzip -c shopware6.sql.gz | -h $DB_HOST -u$DB_USER -p$DB_PASSWORD db_shopware6
 
 # sql no compression
--h $DB_HOST -u$DB_USER -p$DB_PASSWORD db_shopware6 < shopware6.sql
+mysql -h $DB_HOST -u$DB_USER -p$DB_PASSWORD db_shopware6 < shopware6.sql
 
-## Config .htaccess #####################
+## Config .htaccess ###################################################################################
+
 #  Some hosting requiring disabling -MultiViews, else Error 404
 # Enter your root path and copy paste to command line
 DIR_ROOT=/home/www/shopware6/
 find $DIR_ROOT -type f -name .htaccess
 
-## Config .env #####################
+## Config .env ########################################################################################
+
 # shopware .env file with server enviroment credentials
 DIR_ROOT=/home/www/shopware6/
 nano $DIR_ROOT.env
 
-## Update Shopware 6 Domains #####################
+## Update Shopware 6 Domains ##########################################################################
+
 # Even you can do it with Symfony / Shopware 6 bin/console command. Sometime you can enter direct to db table.
 mysql -u$DB_USER -p$DB_PASSWORD;
 USE shopware6
 UPDATE sales_channel_domain SET url='http://foo.com.local' WHERE url='http://foo.com';
 UPDATE sales_channel_domain SET url='https://foo.com.local' WHERE url='https://foo.com';
 
-## Clear Shopware Caches #####################
+## Clear Shopware Caches ##############################################################################
+
 cd $DIR_ROOT
 bin/console cache:clear
+
+
