@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ## check enviorment
 
 # PHP for Magento 1, Magento 2, Shopware 5, Shopware 6, Drupal 8
@@ -7,8 +9,6 @@ php -v
 php -m # installierte module
 php -m | grep ".*cache.*"
 php -r "echo ini_get('memory_limit').PHP_EOL;"
-
-
 
 # find the logs may 
 
