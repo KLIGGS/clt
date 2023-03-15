@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## check enviorment
+## check enviorment ################################################
 
 # PHP for Magento 1, Magento 2, Shopware 5, Shopware 6, Drupal 8
 
@@ -10,9 +10,9 @@ php -m # installierte module
 php -m | grep ".*cache.*"
 php -r "echo ini_get('memory_limit').PHP_EOL;"
 
-# find the logs may 
+# find the logs may ################################################
 
-# search from system root
+# search from system root 
 cd /
 find /  -type f -iregex '.*\.log'
 
@@ -31,12 +31,12 @@ echo $(date +"%Y%m%d-access.log")
 # monitor server log of current day
 tail -f  /log/$(date +"%Y%m%d-access.log")
 
-# Shopware 6
+# Shopware 6 #######################################################
 # Monitor API Access
 tail -f  /log/$(date +"%Y%m%d-access.log") | grep -i ".*/api/search/order.*"
 tail -f  /log/$(date +"%Y%m%d-access.log") | grep -i ".*/api/.*"
 
-# Error 500
+# Error 500 ########################################################
 # check htaccess files
 DIR_APP=/home/www/shopware6
 find $DIR_APP -type f -name .htaccess
@@ -45,3 +45,8 @@ find $DIR_APP -type f -name .htaccess
 # some errors occure because low memory and server disk space
 DIR_APP=/home/www/magento2
 du -c -h -d 0 $DIR_APP
+
+# White Page ########################################################
+# check memory
+# check prod and dev mode
+# 
